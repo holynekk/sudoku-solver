@@ -28,18 +28,27 @@ def solve_sudoku(grid):
 def draw_lock_button():
     text = BASICFONT.render("Lock Nums", True, (0,0,0))
     cell_rect = text.get_rect()
-    cell_rect.topleft = (127, 570)
+    cell_rect.topleft = (52, 570)
     
-    pygame.draw.rect(screen, (200,200,200), (120, 550, 120, 60))
+    pygame.draw.rect(screen, (200,200,200), (45, 550, 120, 60))
     screen.blit(text, cell_rect)
 
 # Solve button shows the solution of current grid with the help of solver.py 
 def draw_solve_button():
     text = BASICFONT.render("Let's Solve", True, (0,0,0))
     cell_rect = text.get_rect()
-    cell_rect.topleft = (307, 570)
+    cell_rect.topleft = (217, 570)
     
-    pygame.draw.rect(screen, (102,255,102), (300, 550, 120, 60))
+    pygame.draw.rect(screen, (102,255,102), (210, 550, 120, 60))
+    screen.blit(text, cell_rect)
+
+    # Solve button shows the solution of current grid with the help of solver.py 
+def draw_reset_button():
+    text = BASICFONT.render("Reset", True, (0,0,0))
+    cell_rect = text.get_rect()
+    cell_rect.topleft = (405, 570)
+    
+    pygame.draw.rect(screen, (255,102,102), (375, 550, 120, 60))
     screen.blit(text, cell_rect)
 
 # Printing the number on screen 
@@ -107,14 +116,7 @@ def deploy_game():
     # demonstration I have built default grid like above.
     # Before locking numbers, user can delete all numbers
     # and set its own grid
-    '''
-    grid = []
-    for i in range(9):
-        nwlist = []
-        for k in range(9):
-            nwlist.append(0)
-        grid.append(nwlist)
-    '''
+
     fpsclock = pygame.time.Clock()
 
     table_width = 540
@@ -180,10 +182,19 @@ def deploy_game():
                             grid[yindex][xindex] = 9
 
         if mouse_clicked:
-            if 300 <= xmouse <= 420 and 550 <= ymouse <= 610:
+            if 240 <= xmouse <= 360 and 550 <= ymouse <= 610:
                 if locked:
                     grid = solve_sudoku(grid)
-            elif 120 <= xmouse <= 240 and 550 <= ymouse <= 610:
+            if 375 <= xmouse <= 495 and 550 <= ymouse <= 610:
+                locked = 0
+                locked_indexes = []
+                grid = []
+                for i in range(9):
+                    nwlist = []
+                    for k in range(9):
+                        nwlist.append(0)
+                    grid.append(nwlist)
+            elif 60 <= xmouse <= 180 and 550 <= ymouse <= 610:
                 if not locked:
                     locked = 1
                     for i in range(9):
@@ -199,6 +210,7 @@ def deploy_game():
         draw_grid()
         draw_solve_button()
         draw_lock_button()
+        draw_reset_button()
         display_numbers(grid, locked_indexes)
 
         if ymouse <= 540:
