@@ -76,7 +76,7 @@ def draw_grid():
         pygame.draw.line(screen, (0, 0, 0), (0, y), (grid_width, y))
 
 
-def main():
+def deploy_game():
 
     pygame.init()
     global fpsclock, screen
@@ -211,4 +211,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    deploy_game()
