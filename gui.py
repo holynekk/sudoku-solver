@@ -201,7 +201,6 @@ def deploy_game():
                         for k in range(9):
                             if grid[i][k]!= 0:
                                 locked_indexes.append((i,k))
-                    print(locked_indexes)
             elif ymouse <= 540:
                 xmouse = xmouse//60 * 60
                 ymouse = ymouse//60 * 60
