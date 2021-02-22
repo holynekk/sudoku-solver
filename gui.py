@@ -3,7 +3,6 @@ import time
 import solver
 from pygame.locals import *
 
-
 fps = 30
 
 grid_height = 540
@@ -12,17 +11,20 @@ grid_width = 540
 square_size = int(540/3)
 cell_size = int(square_size/3)
 
+# Draw a square around selected item.
 def draw_rectangle(x, y, bool_var):
     if bool_var:
         pygame.draw.rect(screen, (0, 0, 255), (x, y, cell_size, cell_size), 1)
     else:
         pygame.draw.rect(screen, (255, 0, 0), (x, y, cell_size, cell_size), 1)
 
-
+# Solving sudoku function that calls helper solve function in solver.py
 def solve_sudoku(grid):
     grid = solver.create_copy(grid)
     return grid
 
+
+# Lock button stores the number that are currently on grid and make them unchangable.
 def draw_lock_button():
     text = BASICFONT.render("Lock Nums", True, (0,0,0))
     cell_rect = text.get_rect()
@@ -31,6 +33,7 @@ def draw_lock_button():
     pygame.draw.rect(screen, (200,200,200), (120, 550, 120, 60))
     screen.blit(text, cell_rect)
 
+# Solve button shows the solution of current grid with the help of solver.py 
 def draw_solve_button():
     text = BASICFONT.render("Let's Solve", True, (0,0,0))
     cell_rect = text.get_rect()
@@ -39,34 +42,39 @@ def draw_solve_button():
     pygame.draw.rect(screen, (102,255,102), (300, 550, 120, 60))
     screen.blit(text, cell_rect)
 
-
-def put_number(data, x, y, size):
-    text = LARGEFONT.render("{}".format(data), True, (0,0,0))
+# Printing the number on screen 
+def put_number(data, x, y, size, locked_indexes):
+    if (int(y/60), int(x/60)) not in locked_indexes:
+        text = LARGEFONT.render("{}".format(data), True, (200,200,200))
+    else:
+        text = LARGEFONT.render("{}".format(data), True, (0,0,0))
     cell_rect = text.get_rect()
     cell_rect.topleft = (x, y)
     screen.blit(text, cell_rect)
 
-
-def display_numbers(grid):
+# Renders all the grid in every loops.
+def display_numbers(grid, locked_indexes):
     for i in range(9):
         for k in range(9):
             if grid[i][k] == 0:
                 continue
             else:
-                put_number(grid[i][k], k*60, i*60, LARGEFONT)
+                put_number(grid[i][k], k*60, i*60, LARGEFONT, locked_indexes)
     return None
 
-
+# Draws the horizontal and vertical lines.
 def draw_grid():
+    # Gray colored lines which seperates small cells.
     for x in range(0, grid_width, cell_size):
         pygame.draw.line(screen, (200, 200, 200), (x, 0), (x, grid_height))
     for y in range(0, grid_height, cell_size):
         pygame.draw.line(screen, (200, 200, 200), (0, y), (grid_width, y))
-
+    # Black colored lines which seperates 3x3 squares.
     for x in range(0, grid_width, square_size):
         pygame.draw.line(screen, (0, 0, 0), (x, 0), (x, grid_height))
     for y in range(0, grid_height+1, square_size):
         pygame.draw.line(screen, (0, 0, 0), (0, y), (grid_width, y))
+
 
 def main():
 
@@ -95,7 +103,7 @@ def main():
 
     locked_indexes = []
 
-    # This part is constructing an ampty grid, but for quick 
+    # This part is constructing an empty grid, but for quick 
     # demonstration I have built default grid like above.
     # Before locking numbers, user can delete all numbers
     # and set its own grid
@@ -173,7 +181,8 @@ def main():
 
         if mouse_clicked:
             if 300 <= xmouse <= 420 and 550 <= ymouse <= 610:
-                grid = solve_sudoku(grid)
+                if locked:
+                    grid = solve_sudoku(grid)
             elif 120 <= xmouse <= 240 and 550 <= ymouse <= 610:
                 if not locked:
                     locked = 1
@@ -185,17 +194,12 @@ def main():
             elif ymouse <= 540:
                 xmouse = xmouse//60 * 60
                 ymouse = ymouse//60 * 60
-                print("X index: "+str(xmouse))
-                print("Y index: "+str(ymouse))
-                print("- - - - - - - ")
 
         screen.fill((255, 255, 255))
         draw_grid()
         draw_solve_button()
         draw_lock_button()
-        display_numbers(grid)
-
-        
+        display_numbers(grid, locked_indexes)
 
         if ymouse <= 540:
             if (yindex, xindex) in locked_indexes:
