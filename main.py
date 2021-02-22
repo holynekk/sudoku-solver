@@ -1,3 +1,4 @@
 import solver
+import gui
 
-solver.solve()
+gui.deploy_game()
