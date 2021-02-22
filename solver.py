@@ -1,5 +1,6 @@
 import time
 
+# Finds the first 0 on grid from start
 def next_empty(grid):
     for i in range(9):
         for k in range(9):
@@ -7,7 +8,7 @@ def next_empty(grid):
                 return (i, k)
     return None
 
-
+# Basically, checks the position is ok to put that number
 def isPossible(row, col, n, grid):
     # Check whether n is already exist in that row.
     for i in range(9):
@@ -27,8 +28,10 @@ def isPossible(row, col, n, grid):
     # That number can be put in there.  
     return True
 
+# Holds the copy of the grid 
 copy = list()
 
+# Solving algorithm with backtracking
 def solve(grid):
     print_grid(grid)
     inds = next_empty(grid)
@@ -38,17 +41,15 @@ def solve(grid):
         return True
     else:
         row, col = inds
-
     for i in range(1, 10):
         if isPossible(row, col, i, grid):
             grid[row][col] = i
             if solve(grid):
                 return True
             grid[row][col] = 0
-
     return False
 
-
+# Main function of solver.py
 def create_copy(grid):
     global copy
 
@@ -56,21 +57,6 @@ def create_copy(grid):
     print_grid(copy)
     return copy
 
-'''
-def solve(grid):
-    # Scanning grid for empty square.
-    for y in range(9):
-        for x in range(9):
-            if grid[y][x] == 0:
-                for i in range(1, 10):
-                    if isPossible(y, x, i, grid):
-                        grid[y][x] = i
-                        solve(grid)
-                        grid[y][x] = 0
-                print("return ledik moruk")
-                return grid
-    print_grid(grid)
-'''
 
 # To print grid into console
 def print_grid(grid):
@@ -87,8 +73,3 @@ def print_grid(grid):
     print('\n')
 
 
-def all_filled(grid):
-    for i in range(9):
-        if grid[i].count(0) > 0:
-            return False
-    return True
